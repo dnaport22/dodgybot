@@ -1,0 +1,19 @@
+[
+  {"text": "hi", "label": "greeting"},
+  {"text": "hello", "label": "greeting"},
+  {"text": "heya", "label": "greeting"},
+  {"text": "hiya", "label": "greeting"},
+  {"text": "hey", "label": "greeting"},
+  {"text": "why", "label": "question"},
+  {"text": "what", "label": "question"},
+  {"text": "how", "label": "question"},
+  {"text": "how are you", "label": "question"},
+  {"text": "how you doing", "label": "question"},
+  {"text": "fly", "label": "random"},
+  {"text": "oo", "label": "random"},
+  {"text": "weather", "label": "random"},
+  {"text": "today", "label": "random"},
+  {"text": "there", "label": "random"},
+  {"text": "their", "label": "random"},
+  {"text": "sing", "label": "random"}
+]
