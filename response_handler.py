@@ -7,14 +7,10 @@ class ResponseHandler():
       "greeting": [
         "Whaddup Homie!",
         "Yo!",
-        "You know who this is.",
-        "Ghostbusters, whatya want?"
       ],
       "question": [
-        "I can't complain... I've tried, but no one listens.",
 		"You think I know what to say?",
 		"My lawyer says I don't have to answer that question.",
-		"Go Away!"
       ],
       "random": [
         "Heeey, baaaaaby.",

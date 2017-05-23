@@ -3,26 +3,41 @@ from textblob.classifiers import NaiveBayesClassifier
 from intent import intents
 import json
 from response_handler import ResponseHandler
-from chatterbot import ChatBot
+import speech_recognition as sr
+import os
+# from chatterbot import ChatBot
 
 class DodgyBot():
   
   __msg = None
 
   def __init__(self, ResponseHandler):
+    self.recogniser = sr.Recognizer()
+    self.microphone = sr.Microphone()
     self.handler = ResponseHandler
     self.chatbot = None
     self.loadIntent()
 
-  def listener(self, msg):
-    self.__setMessage(msg)
+  def listen(self, listen_freq=0):
+    while listen_freq == 0:
+      with self.microphone as source:
+        
+        self.audio = self.recogniser.listen(source)
+
+      return True
+
+  def recogniseAudio(self):
+    print 'Recognising...'
+    response = self.recogniser.recognize_google(self.audio)
+
+    return self.setMessage(response) 
 
   def loadIntent(self):
-    self.chatbot = ChatBot(
-      'Dodgy Bot',
-      trainer= 'chatterbot.trainers.ChatterBotCorpusTrainer'
-    )
-    self.chatbot.train("chatterbot.corpus.english")
+    # self.chatbot = ChatBot(
+    #   'Dodgy Bot',
+    #   trainer= 'chatterbot.trainers.ChatterBotCorpusTrainer'
+    # )
+    # self.chatbot.train("chatterbot.corpus.english")
 
     with open("intent_data.json", "r") as fp:
       self.cl = NaiveBayesClassifier(fp, format="json")
@@ -32,17 +47,17 @@ class DodgyBot():
 
   def loadResponse(self, intent):
     if (intent == "greeting"):
-      return self.handler.greetingHandler(
+      return os.system("say '%s'"%(self.handler.greetingHandler(
           self.getMessage()
-        )
+        )))
     if (intent == "question"):
-      return self.handler.questionHandler(
+      return os.system("say '%s'"%(self.handler.questionHandler(
           self.getMessage()
-        )
+        )))
 
-    #return self.chatbot.get_response(self.getMessage())
+    return os.system("say '%s'"%(self.handler.unknownResponse(self.getMessage())))
 
-  def __setMessage(self, msg):
+  def setMessage(self, msg):
     DodgyBot.__msg = msg
 
   def getMessage(self):
@@ -54,17 +69,18 @@ class DodgyBot():
 def main():
   handler = ResponseHandler()
   bot = DodgyBot(handler)
-
-  print "Hello, I am a Dodgy Bot."
+  print "Hello I am a Dodgy Bot"
+  os.system("say 'Hello I am a Dodgy Bot'")
 
   while True:
-    user_input = str(raw_input('Ask me dodgy stuff: '))
-    user_input = user_input.lower().strip()
-    bot.listener(user_input)
+    bot.listen()
+    print bot.recogniseAudio()
+    # user_input = bot.recogniseAudio().lower().strip()
 
-    if (user_input in ["goodbye", "bye", "exit"]):
-      print "Bye!"
-      exit()
+    # if (user_input in ["goodbye", "bye", "exit"]):
+    #   os.system("say 'Bye'")
+    #   exit()
+
     intent = bot.getIntent()
     print bot.loadResponse(intent)
 
